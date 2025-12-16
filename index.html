@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourFinalFinancer Dashboard</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <h2>Financer App</h2>
+            <nav>
+                <div class="nav-item active" data-view="dashboard-view">
+                    <i class="fas fa-home"></i> Dashboard
+                </div>
+                <div class="nav-item" data-view="recurring-view">
+                    <i class="fas fa-redo-alt"></i> Recurring
+                </div>
+                <div class="nav-item" data-view="goals-view">
+                    <i class="fas fa-bullseye"></i> Saving Goals
+                </div>
+                <div class="nav-item" data-view="inventory-view">
+                    <i class="fas fa-box-open"></i> Inventory
+                </div>
+                <div class="nav-item" data-view="calculator-view">
+                    <i class="fas fa-calculator"></i> Calculator
+                </div>
+                <div class="nav-item" data-view="notes-view">
+                    <i class="fas fa-clipboard"></i> Notes
+                </div>
+                <div class="nav-item" data-view="settings-view">
+                    <i class="fas fa-cog"></i> Settings
+                </div>
+            </nav>
+            
+            <div id="themeToggle" class="nav-item" style="margin-top: 20px;">
+                <i class="fas fa-moon"></i> <span id="modeText">Enable Dark Mode</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <section id="dashboard-view" class="view active">
+                <h1><i class="fas fa-home"></i> Dashboard Overview</h1>
+                
+                <div class="dashboard-grid">
+                
+                    <div class="card full-width">
+                        <h2><i class="fas fa-chart-line"></i> Financial Summary</h2>
+                        
+                        <div class="summary-grid">
+                            <div class="summary-card" style="background-color: var(--income-color); color: var(--text-light);">
+                                <p>Current Balance</p>
+                                <div id="currentBalance" style="font-size: 1.5em; font-weight: 700;">$0.00</div>
+                            </div>
+                            <div class="summary-card" style="background-color: #d4edda; color: var(--income-color);">
+                                <p>Total Income</p>
+                                <div id="totalIncome" style="font-size: 1.5em; font-weight: 700;">$0.00</div>
+                            </div>
+                            <div class="summary-card" style="background-color: #f8d7da; color: var(--expense-color);">
+                                <p>Total Expense</p>
+                                <div id="totalExpense" style="font-size: 1.5em; font-weight: 700;">$0.00</div>
+                            </div>
+                        </div>
+                        
+                        <canvas id="balanceChart" width="400" height="150"></canvas>
+                    </div>
+
+                    <div class="card full-width">
+                        <h2><i class="fas fa-plus-circle"></i> Record Transaction</h2>
+                        <form id="transactionForm" onsubmit="event.preventDefault(); addTransaction();" class="grid-form two-col">
+                            <div class="input-group">
+                                <label for="description">Description</label>
+                                <input type="text" id="description" required placeholder="e.g., Sale, Rent, Salary">
+                            </div>
+                            <div class="input-group">
+                                <label for="amount">Amount ($)</label>
+                                <input type="number" id="amount" required min="0.01" step="0.01" placeholder="e.g., 50.00">
+                            </div>
+                            <div class="input-group">
+                                <label for="type">Type</label>
+                                <select id="type" required>
+                                    <option value="income">Income</option>
+                                    <option value="expense">Expense</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <button type="submit" class="add-btn"><i class="fas fa-check"></i> Add Transaction</button>
+                        </form>
+                    </div>
+                    
+                    <div class="card full-width">
+                        <h2><i class="fas fa-history"></i> Recent Transactions</h2>
+                        <div class="transactions-container">
+                            <div class="transaction-header">
+                                <div>Date</div>
+                                <div>Description</div>
+                                <div>Type</div>
+                                <div class="align-right">Amount</div>
+                                <div class="align-right">Actions</div>
+                            </div>
+                            <ul id="transactionList">
+                                </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+            
+            <section id="recurring-view" class="view">
+                <h1><i class="fas fa-redo-alt"></i> Recurring Payments</h1>
+                
+                <div class="dashboard-grid">
+                    
+                    <div class="card">
+                        <h2><i class="fas fa-calendar-plus"></i> Set Recurring Entry</h2>
+                        <form id="recurringForm" onsubmit="event.preventDefault(); addRecurringEntry();" class="grid-form two-col">
+                            <div class="input-group">
+                                <label for="recurringDescription">Description</label>
+                                <input type="text" id="recurringDescription" required placeholder="e.g., Monthly Rent, Subscription Fee">
+                            </div>
+                            <div class="input-group">
+                                <label for="recurringAmount">Amount ($)</label>
+                                <input type="number" id="recurringAmount" required min="0.01" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="recurringType">Type</label>
+                                <select id="recurringType" required>
+                                    <option value="expense">Expense (Out)</option>
+                                    <option value="income">Income (In)</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="recurringDay">Day of Month</label>
+                                <input type="number" id="recurringDay" required min="1" max="28" placeholder="1 to 28">
+                            </div>
+                            <button type="submit" class="add-btn full-width" style="grid-column: span 2;"><i class="fas fa-plus"></i> Save Recurring Entry</button>
+                        </form>
+                    </div>
+                    
+                    <div class="card">
+                        <h2><i class="fas fa-clock"></i> Active Recurring Entries</h2>
+                        <div id="recurringList">
+                            </div>
+                    </div>
+                    
+                </div>
+            </section>
+            
+            <section id="goals-view" class="view">
+                <h1><i class="fas fa-bullseye"></i> Saving Goals Tracker</h1>
+                
+                <div class="dashboard-grid">
+                    
+                    <div class="card">
+                        <h2><i class="fas fa-flag"></i> Set a New Goal</h2>
+                        <form id="goalForm" onsubmit="event.preventDefault(); addSavingGoal();" class="grid-form two-col">
+                            <div class="input-group">
+                                <label for="goalName">Goal Name</label>
+                                <input type="text" id="goalName" required placeholder="e.g., Vacation Fund">
+                            </div>
+                            <div class="input-group">
+                                <label for="goalTarget">Target Amount ($)</label>
+                                <input type="number" id="goalTarget" required min="1" step="0.01" placeholder="e.g., 2500.00">
+                            </div>
+                            <div class="input-group">
+                                <label for="goalCurrent">Current Contribution ($)</label>
+                                <input type="number" id="goalCurrent" value="0.00" min="0" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="goalDate">Target Date</label>
+                                <input type="date" id="goalDate" required>
+                            </div>
+                            <button type="submit" class="add-btn full-width" style="grid-column: span 2;"><i class="fas fa-plus"></i> Add Goal</button>
+                        </form>
+                    </div>
+                    
+                    <div class="card">
+                        <h2><i class="fas fa-list-ul"></i> Active Goals</h2>
+                        <div id="goalsList">
+                            </div>
+                    </div>
+                    
+                </div>
+            </section>
+
+            
+            <section id="inventory-view" class="view">
+                <h1><i class="fas fa-box-open"></i> Inventory & Sales</h1>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2 class="section-divider"><i class="fas fa-hand-holding-usd"></i> Record Sales & View Log</h2>
+                    <p class="muted-note">Record a sale: Stock is deducted, and the transaction log records both **Revenue (Income)** and **Cost of Goods Sold (COGS - Expense)**.</p>
+
+                    <form id="ledgerSaleForm" onsubmit="event.preventDefault(); recordLedgerSale();" class="grid-form two-col padded-form">
+                        <div class="input-group">
+                            <label for="ledgerSaleItemSelect">Item Sold</label>
+                            <select id="ledgerSaleItemSelect" required></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="ledgerSaleQuantity">Quantity Sold</label>
+                            <input type="number" id="ledgerSaleQuantity" required min="1" placeholder="Quantity">
+                        </div>
+                        <div class="input-group">
+                            <label for="ledgerSaleCost">Unit Cost (COGS - in $)</label>
+                            <input type="number" id="ledgerSaleCost" required min="0" step="0.01" placeholder="Cost per Unit">
+                        </div>
+                        <button type="submit" class="add-btn" style="background-color: var(--income-color); color: var(--text-dark);">
+                            <i class="fas fa-receipt"></i> **Complete & Log Sale**
+                        </button>
+                    </form>
+                    
+                    <h3 style="margin-top: 30px;">Recent Sales Log (Last 10)</h3>
+                    <div class="transaction-header" id="salesLogHeader" style="grid-template-columns: 1.5fr 1fr 1fr 1fr;">
+                        <div>Item Sold</div>
+                        <div class="align-center">Qty</div>
+                        <div class="align-right">Revenue</div>
+                        <div class="align-right">Profit</div>
+                    </div>
+                    
+                    <ul id="salesLogList">
+                    </ul>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2 class="section-divider"><i class="fas fa-cubes"></i> Inventory Management</h2>
+                    <p class="muted-note">Add or update product stock details.</p>
+                    
+                    <form onsubmit="event.preventDefault(); submitMultiInventory();">
+                        <div id="dynamicInventoryInputs" class="inventory-form-container">
+                        </div>
+                        <div class="inventory-form-controls">
+                            <button type="button" onclick="addInventoryRow()" class="secondary-btn"><i class="fas fa-plus"></i> Add Item Row</button>
+                            <button type="submit" class="add-btn"><i class="fas fa-save"></i> Save All New Inventory</button>
+                        </div>
+                    </form>
+
+                    <h3 style="margin-top: 30px;">Current Stock List</h3>
+                    <div class="transactions-container" style="margin-top: 10px;">
+                        <div class="inventory-header">
+                            <div>Item Name</div>
+                            <div class="align-center">Stock</div>
+                            <div class="align-right">Unit Price</div>
+                            <div class="align-right">Total Value</div>
+                            <div class="align-right">Actions</div>
+                        </div>
+                        <div id="inventoryList">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="notes-view" class="view">
+                <h1><i class="fas fa-clipboard"></i> Private Notes</h1>
+                <div class="card full-width">
+                    <textarea id="appNotes" placeholder="Write down your financial goals, ideas, or to-do lists here. It saves automatically as you type." rows="15"></textarea>
+                </div>
+            </section>
+            
+            <section id="calculator-view" class="view">
+                <h1><i class="fas fa-calculator"></i> Goal Time Calculator</h1>
+                <p class="muted-note">Estimate how long it will take to reach a financial goal based on your monthly savings.</p>
+                
+                <div class="card">
+                    <form onsubmit="event.preventDefault(); calculateTime();" class="grid-form">
+                        <div class="input-group">
+                            <label for="goalAmount">Total Goal Amount ($)</label>
+                            <input type="number" id="goalAmount" required min="0.01" step="0.01" placeholder="e.g., 5000">
+                        </div>
+                        <div class="input-group">
+                            <label for="monthlySavings">Estimated Monthly Savings/Contribution ($)</label>
+                            <input type="number" id="monthlySavings" required min="0.01" step="0.01" placeholder="e.g., 500">
+                        </div>
+                        <button type="submit" class="add-btn"><i class="fas fa-hourglass-half"></i> Calculate Time</button>
+                    </form>
+                    
+                    <div id="result" class="result-box">
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings-view" class="view">
+                <h1><i class="fas fa-cog"></i> Settings & Utilities</h1>
+                
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h2><i class="fas fa-language"></i> Currency Setting</h2>
+                         <div class="input-group">
+                            <label for="settingsCurrencySelect">Select Display Currency:</label>
+                            <select id="settingsCurrencySelect" onchange="switchCurrency(this.value)">
+                                <option value="USD">$ USD - US Dollar</option>
+                                <option value="EUR">€ EUR - Euro</option>
+                                <option value="GBP">£ GBP - British Pound</option>
+                                <option value="NGN">₦ NGN - Nigerian Naira</option>
+                            </select>
+                            <p class="muted-note">Note: All core data is stored in USD ($) for consistency and converted for display.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card danger-zone">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+                        <p>This action will permanently wipe all stored data including transactions, goals, inventory, and notes.</p>
+                        <button onclick="resetApplication()" class="delete-btn full-width"><i class="fas fa-trash"></i> **RESET APPLICATION DATA**</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Edit Transaction</h2>
+            <form id="editForm" onsubmit="saveEditedTransaction(event)">
+                <input type="hidden" id="editIndex">
+                <div class="input-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required>
+                </div>
+                <div class="input-group">
+                    <label for="editAmount">Amount ($)</label>
+                    <input type="number" id="editAmount" required min="0.01" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="editType">Type</label>
+                    <select id="editType" required>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="editDate">Date</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                <button type="submit" class="add-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+
+</body>
+</html>

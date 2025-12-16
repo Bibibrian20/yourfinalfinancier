@@ -1,0 +1,384 @@
+/* --- Root Variables for Theming (Light Mode Default) --- */
+:root {
+    --primary-color: #007bff; /* Blue for primary actions */
+    --secondary-color: #6c757d; /* Gray for secondary actions */
+    --background-color: #f8f9fa; /* Light gray background */
+    --card-background: #ffffff; /* White card background */
+    --text-dark: #212529;
+    --text-light: #f8f9fa;
+    --border-color: #dee2e6;
+
+    --income-color: #28a745; /* Green */
+    --expense-color: #dc3545; /* Red */
+    --profit-color: #17a2b8; /* Cyan/Info */
+}
+
+/* --- Dark Mode Overrides --- */
+body.dark-mode {
+    --primary-color: #4CAF50; /* Strong Green */
+    --secondary-color: #cccccc;
+    --background-color: #121212; /* Dark background */
+    --card-background: #1e1e1e; /* Slightly lighter dark card */
+    --text-dark: #e0e0e0; /* Light gray text */
+    --text-light: #ffffff;
+    --border-color: #333333;
+    
+    --income-color: #38a745;
+    --expense-color: #cc4555;
+}
+
+
+/* --- Global Reset and Typography --- */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-dark);
+    padding: 20px; 
+    line-height: 1.6; 
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h1 {
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+/* --- Layout Containers --- */
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding-left: 20px;
+}
+
+/* --- Navigation & Sidebar --- */
+
+.sidebar {
+    width: 250px;
+    background-color: var(--card-background);
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.nav-item {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.nav-item i {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* --- Card Styles & View Switching --- */
+
+/* Hides all views by default */
+.view {
+    display: none; 
+}
+
+/* Shows only the active view */
+.view.active {
+    display: block; 
+}
+
+.card {
+    background-color: var(--card-background);
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px; 
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* --- Dashboard Grid Layout for Spacing --- */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px; 
+}
+
+@media (min-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr; 
+    }
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* --- Form and Input Styles --- */
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+    background-color: var(--card-background);
+    color: var(--text-dark);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.grid-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.grid-form.two-col {
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 500px) {
+    .grid-form.two-col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* --- Button Styles --- */
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, opacity 0.2s;
+    white-space: nowrap;
+}
+
+.add-btn {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+.add-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: var(--expense-color);
+    color: var(--text-light);
+}
+
+.delete-btn:hover {
+    background-color: #bd2130;
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- Data Display & Transactions --- */
+
+.transactions-container {
+    overflow-x: auto; /* Handle potential overflow on small screens */
+}
+
+.transaction-header, .transaction-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr; /* Added action column */
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+}
+
+.transaction-header {
+    font-weight: 600;
+    background-color: var(--border-color);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    color: var(--text-dark);
+}
+
+.transaction-item div {
+    padding: 0 5px;
+}
+
+.income {
+    color: var(--income-color);
+}
+
+.expense {
+    color: var(--expense-color);
+}
+
+/* --- Utility Classes --- */
+.section-divider {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.muted-note {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+    margin-top: -10px;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
+}
+
+/* Inventory Specific Styles */
+.inventory-header, .inventory-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr; 
+    padding: 10px 0;
+    align-items: center;
+}
+.inventory-header {
+    font-weight: 600;
+    background-color: var(--border-color);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+.inventory-row {
+    border-bottom: 1px dashed var(--border-color);
+}
+.inventory-form-container {
+    margin-bottom: 20px;
+}
+.inventory-form-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Saving Goals Specific Style */
+.goal-item {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Modal Styling */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 10; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    margin: 5% auto; 
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%; 
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-btn {
+    color: var(--text-dark);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--expense-color);
+    text-decoration: none;
+    cursor: pointer;
+}
