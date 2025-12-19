@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canverest | Pure Financial Intelligence</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --primary: #2ecc71; 
+            --bg: #010409; 
+            --glass: rgba(13, 17, 23, 0.85);
+            --border: rgba(255, 255, 255, 0.08); 
+            --text-dim: #8b949e; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); 
+            color: #f0f6fc; 
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* ELITE CURSOR & AURA */
+        #cursor { 
+            width: 22px; height: 22px; border: 2px solid var(--primary); 
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; 
+        }
+        .aura { 
+            position: fixed; width: 100vw; height: 100vh; z-index: -1; 
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(46, 204, 113, 0.15) 0%, transparent 45%); 
+        }
+
+        /* NAVIGATION */
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 25px 8%; position: fixed; width: 100%; top: 0; z-index: 1000; 
+            background: rgba(1, 4, 9, 0.85); backdrop-filter: blur(25px); 
+            border-bottom: 1px solid var(--border); 
+        }
+        .brand { font-weight: 800; font-size: 1.8rem; color: white; text-decoration: none; letter-spacing: -2px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; margin-left: 35px; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* REVEAL ANIMATION */
+        .reveal { opacity: 0; transform: translateY(50px); transition: 1.2s cubic-bezier(0.2, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* HERO SECTION */
+        .hero { 
+            padding: 250px 8% 150px; display: grid; grid-template-columns: 1.3fr 1fr; 
+            align-items: center; gap: 80px; min-height: 100vh; 
+        }
+        h1 { font-size: clamp(4rem, 9vw, 8rem); line-height: 0.85; letter-spacing: -7px; margin-bottom: 40px; }
+        h1 span { color: var(--primary); }
+        .subtitle { font-size: 1.5rem; color: var(--text-dim); margin-bottom: 50px; font-weight: 200; max-width: 600px; }
+
+        .btn-elite { 
+            background: white; color: black; padding: 24px 55px; border-radius: 12px; 
+            text-decoration: none; font-weight: 800; font-size: 1.1rem; display: inline-block; transition: 0.4s; 
+        }
+        .btn-elite:hover { background: var(--primary); color: white; transform: translateY(-5px); box-shadow: 0 20px 40px rgba(46, 204, 113, 0.3); }
+
+        /* TERMINAL BOX */
+        .terminal { 
+            background: #000; border: 1px solid var(--primary); border-radius: 15px; 
+            padding: 35px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--primary); 
+            box-shadow: 0 0 40px rgba(46, 204, 113, 0.1);
+        }
+
+        /* ABOUT US / STORY SECTION */
+        .story-section { padding: 160px 8%; max-width: 1000px; }
+        .story-content h2 { font-size: 3.5rem; letter-spacing: -3px; margin-bottom: 40px; }
+        .story-content p { font-size: 1.3rem; color: var(--text-dim); margin-bottom: 30px; line-height: 1.8; }
+
+        /* BENTO SECTIONS */
+        .section { padding: 120px 8%; border-top: 1px solid var(--border); }
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 25px; }
+        .bento-card { background: var(--glass); border: 1px solid var(--border); border-radius: 40px; padding: 60px; transition: 0.5s; }
+        .bento-card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        
+        .large { grid-column: span 8; }
+        .small { grid-column: span 4; }
+        .full { grid-column: span 12; }
+
+        /* SIGNUP */
+        .signup-zone { text-align: center; padding: 180px 8%; background: #050505; border-top: 1px solid var(--border); }
+        input { 
+            background: #000; border: 1px solid var(--border); padding: 25px 40px; 
+            border-radius: 12px; color: white; width: 450px; font-size: 1.1rem; outline: none; transition: 0.3s;
+        }
+        .submit-btn { 
+            background: var(--primary); color: black; border: none; padding: 25px 50px; 
+            border-radius: 12px; font-weight: 800; cursor: none; margin-left: 15px; font-size: 1.1rem;
+        }
+
+        footer { padding: 80px; text-align: center; color: var(--text-dim); font-size: 0.75rem; letter-spacing: 4px; border-top: 1px solid var(--border); opacity: 0.6; }
+
+        @media (max-width: 1100px) {
+            .hero, .bento-grid { grid-template-columns: 1fr; }
+            .large, .small { grid-column: span 12; }
+            input { width: 100%; margin-bottom: 20px; }
+            .submit-btn { width: 100%; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <div class="aura"></div>
+
+    <nav>
+        <a href="#" class="brand">CANVEREST</a>
+        <div class="nav-links">
+            <a href="#about">Heritage</a>
+            <a href="#vision">Mission</a>
+            <a href="app.html" style="color: var(--primary);">Access Interface</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="reveal">
+            <p style="color: var(--primary); font-weight: 800; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase;">Green-Tech Broker Ecosystem</p>
+            <h1>Pure <span>Intelligence.</span></h1>
+            <p class="subtitle">Canverest is the architecture of sovereignty. High-performance financial intelligence designed for absolute privacy.</p>
+            <a href="app.html" class="btn-elite">Initialize Session</a>
+        </div>
+        <div class="terminal reveal">
+            <p>> initializing canverest_v1.0.0...</p>
+            <p>> status: system_ready</p>
+            <p>> network: encrypted_green_node</p>
+        </div>
+    </header>
+
+    <section id="about" class="story-section reveal">
+        <div class="story-content">
+            <p style="color: var(--primary); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Our Heritage</p>
+            <h2>The Genesis of Canverest.</h2>
+            <p>Founded in late 2025, Canverest began as a quiet side project within the **Green-Tech Broker** archive. We saw a financial world cluttered with "dirty" software—apps that harvested user data and consumed massive amounts of energy on central servers.</p>
+            <p>We started with a single question: *Can we build financial intelligence that is both invisible to the cloud and kind to the planet?*</p>
+            <p>Our aim is simple yet absolute: To provide elite individuals with the tools to command their wealth with **zero tracking** and **zero carbon footprint**. We aren't just a platform; we are a standard for the next generation of capital management.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="bento-grid">
+            <div class="bento-card large reveal">
+                <h3 style="font-size: 2.5rem; margin-bottom: 25px;">Privacy as a Core Right.</h3>
+                <p style="color: var(--text-dim); font-size: 1.2rem;">Canverest is built on a Zero-Knowledge architecture. Your financial intelligence lives on your device, not in our database.</p>
+            </div>
+            <div class="bento-card small reveal" style="background: var(--primary); color: black; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="font-size: 4rem; line-height: 1;">94%</h3>
+                <p style="font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Energy Saved</p>
+            </div>
+            <div class="bento-card full reveal">
+                <h3 style="font-size: 2.5rem; margin-bottom: 25px;">The Green-Tech Aim.</h3>
+                <p style="color: var(--text-dim); font-size: 1.2rem;">Our ultimate goal is to lead the "Clean Money" movement. By shifting computation from high-heat servers to local silicon, we protect your data while preserving the environment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="vision" class="signup-zone reveal">
+        <h2 style="font-size: 4.5rem; letter-spacing: -3px; margin-bottom: 30px;">Secure your legacy.</h2>
+        <p class="subtitle" style="margin: 0 auto 60px;">Join the whitelist for the Canverest Enterprise Roadmap.</p>
+        <form action="https://formspree.io/f/mqezalok" method="POST" style="display: inline-block;">
+            <input type="email" name="email" placeholder="Institutional Email" required>
+            <button type="submit" class="submit-btn">AUTHORIZE</button>
+        </form>
+    </section>
+
+    <footer>© 2025 CANVEREST | A GREEN-TECH BROKER EXPERIMENT</footer>
+
+    <script>
+        // CURSOR & AURA
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            document.querySelector('.aura').style.setProperty('--x', e.clientX + 'px');
+            document.querySelector('.aura').style.setProperty('--y', e.clientY + 'px');
+        });
+
+        // REVEAL
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
